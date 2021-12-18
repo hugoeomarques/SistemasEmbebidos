@@ -11,12 +11,12 @@ router.get('/teste/:hum/:temp/:solo', function(req, res, next) {
   let humidadeAr = parseFloat(req.params.hum)
   let humidadeSolo = parseFloat(req.params.solo);
   let stringFinal = ""
-  if(temperatura >= 21.9 || humidadeAr >= 80.0){
-    stringFinal += "abrir janelas";
+  if(temperatura >= 20.9 || humidadeAr >= 80.0){
+    stringFinal += "abrir janelas\n";
   }else if(temperatura <=19){
-    stringFinal += "ligar luzes de aquecimento";
+    stringFinal += "ligar luzes de aquecimento\n";
   }else{
-    stringFinal += "swag";
+    stringFinal += "swag\n";
   }
   //humidadeSolo ∈ [0,1024]
   if(humidadeSolo < 300){
