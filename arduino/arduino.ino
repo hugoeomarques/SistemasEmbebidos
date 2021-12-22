@@ -4,23 +4,27 @@
 #include <DHT.h>
 #include <ESP8266WiFi.h>
 #include <Servo.h>
-Servo servo_1;
+Servo servo_janela, servo_rega;
 #define POTPIN A0
 #define DHTPIN 13
-#define SERVOMOTORPIN 12
-#define LUZESTEMPPIN 14 /*luzes para aumentar a temperatra*/
-const char* ssid     = "TVRS_AP";
-const char* password = "*Tavares123?*";
-/*const char* ssid     = "labmicro";
-const char* password = "microwifi";*/
+#define SERVOJANELAPIN 12
+#define SERVOREGAPIN 14 
+#define LUZESTEMPPIN 16/*luzes para aumentar a temperatra*/
+/*const char* ssid     = "TVRS_AP";
+const char* password = "*Tavares123?*";*/
+const char* ssid     = "labmicro";
+const char* password = "microwifi";
+const char* host = "192.168.1.103";
+const int httpPort = 3000;
 DHT dht(DHTPIN,DHT11);
 void setup() {
-  servo_1.attach(SERVOMOTORPIN);
+  servo_janela.attach(SERVOJANELAPIN);
+  servo_rega.attach(SERVOREGAPIN);
+  
   delay(100);
   Serial.begin(115200);
   dht.begin();
   Serial.println("Comecei");
-  pinMode(SERVOMOTORPIN, OUTPUT);
   pinMode(LUZESTEMPPIN, OUTPUT);
 
   // We start by connecting to a WiFi network
@@ -50,7 +54,7 @@ void setup() {
 int potval = 0;
 float temp = .0;
 float hum = .0;
-const char* host = "192.168.3.134";
+
 void loop() {  
   lerDados();
   delay(2000);
@@ -59,7 +63,7 @@ void loop() {
 }
 
 void lerDados(){
-   potval = analogRead(POTPIN);
+  potval = analogRead(POTPIN);
   temp = dht.readTemperature();
   hum = dht.readHumidity();
   Serial.print("Temp: ");
@@ -77,7 +81,6 @@ void getRequest(){
   Serial.println(host);
   // Use WiFiClient class to create TCP connections
   WiFiClient client;
-  const int httpPort = 3000;
   if (!client.connect(host, httpPort)) {
     Serial.println("connection failed");
     return;
@@ -104,32 +107,63 @@ void getRequest(){
   while(client.available()){
     String line = client.readStringUntil('\r');
     if(line.indexOf("regar") != -1){
-      Serial.print("ligar o motor");
+      Serial.print("motor - regar");
+      ligarServoRega();
     }
     if(line.indexOf("abrir janelas") != -1){
-      Serial.print("ligar servomotor para abrir janela");
-      ligarServoMotor();
+      Serial.print("motor - abrir janela");
+      ligarServoJanela(1);
+      ligarLuzes();
     }else if(line.indexOf("ligar luzes de aquecimento") != -1){
       Serial.print("acender luzes de temperatura");
+      ligarServoJanela(0);
+      ligarLuzes();
+      //todo acender luzes
     }
-    //Serial.print(line);
   }
   
   Serial.println();
   Serial.println("closing connection");
 }
 
-int estaAberto = LOW;
-void ligarServoMotor(){
-  if(estaAberto == LOW)
-    estaAberto = HIGH;
-  else estaAberto = LOW;  
-  for (int i = 0; i <= 120; i += 1) {
-    servo_1.write(i);
-    delay(10); // Wait for 50 millisecond(s)
+int luzesLigadas=LOW;
+void ligarLuzes(){
+  if(luzesLigadas){
+    digitalWrite(LUZESTEMPPIN,LOW);
+    luzesLigadas = LOW;
+  }else{
+    digitalWrite(LUZESTEMPPIN,HIGH);
+    luzesLigadas = HIGH;
   }
+}
+
+
+int estaAberto = LOW;
+void ligarServoJanela(int abrirJanela){
+  if(estaAberto == LOW && abrirJanela){
+    for (int i = 0; i <= 120; i += 1) {
+      servo_janela.write(i);
+      delay(10); // Wait for 50 millisecond(s)
+    }
+    estaAberto = HIGH;  
+  }
+  else if(!abrirJanela && estaAberto == HIGH){
+    for (int k = 120; k >= 0; k -= 1) {
+      servo_janela.write(k);
+      delay(10); // Wait for 50 millisecond(s)
+    }
+    estaAberto = LOW;  
+  }
+}
+
+void ligarServoRega(){
+  for (int i = 0; i <= 120; i += 1) {
+    servo_rega.write(i);
+    delay(1); 
+  }
+  delay(5000);//abrir "valvula" durante 5 segundos
   for (int k = 120; k >= 0; k -= 1) {
-    servo_1.write(k);
-    delay(10); // Wait for 50 millisecond(s)
+    servo_rega.write(k);
+    delay(1);  
   }
 }

@@ -13,7 +13,7 @@ router.get('/teste/:hum/:temp/:solo', function(req, res, next) {
   let stringFinal = ""
   if(temperatura >= 20.9 || humidadeAr >= 80.0){
     stringFinal += "abrir janelas\n";
-  }else if(temperatura <=19){
+  }else if(temperatura <=19.8){
     stringFinal += "ligar luzes de aquecimento\n";
   }else{
     stringFinal += "swag\n";
