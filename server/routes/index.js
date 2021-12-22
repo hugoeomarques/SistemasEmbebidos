@@ -18,6 +18,7 @@ router.get('/teste/:hum/:temp/:solo', function(req, res, next) {
   }else{
     stringFinal += "swag\n";
   }
+  
   //humidadeSolo ∈ [0,1024]
   if(humidadeSolo < 300){
     res.send(stringFinal + "\nregar")

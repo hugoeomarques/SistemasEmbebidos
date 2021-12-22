@@ -113,11 +113,11 @@ void getRequest(){
     if(line.indexOf("abrir janelas") != -1){
       Serial.print("motor - abrir janela");
       ligarServoJanela(1);
-      ligarLuzes();
+      ligarLuzes(1);
     }else if(line.indexOf("ligar luzes de aquecimento") != -1){
       Serial.print("acender luzes de temperatura");
       ligarServoJanela(0);
-      ligarLuzes();
+      ligarLuzes(0);
       //todo acender luzes
     }
   }
@@ -127,11 +127,11 @@ void getRequest(){
 }
 
 int luzesLigadas=LOW;
-void ligarLuzes(){
-  if(luzesLigadas){
+void ligarLuzes(int estaoLigadas){
+  if(luzesLigadas && estaoLigadas == 1){
     digitalWrite(LUZESTEMPPIN,LOW);
     luzesLigadas = LOW;
-  }else{
+  }else if(estaoLigadas == 0 && !luzesLigadas){
     digitalWrite(LUZESTEMPPIN,HIGH);
     luzesLigadas = HIGH;
   }
