@@ -12,9 +12,11 @@ Servo servo_janela, servo_rega;
 #define LUZESTEMPPIN 16/*luzes para aumentar a temperatra*/
 /*const char* ssid     = "TVRS_AP";
 const char* password = "*Tavares123?*";*/
-const char* ssid     = "labmicro";
-const char* password = "microwifi";
-const char* host = "192.168.1.103";
+/*const char* ssid     = "labmicro";
+const char* password = "microwifi";*/
+const char* ssid     = "Vodafone-ADBCF7";
+const char* password = "97G7FEAJ9MXCGFF3";
+const char* host = "192.168.1.141";
 const int httpPort = 3000;
 DHT dht(DHTPIN,DHT11);
 void setup() {
@@ -141,14 +143,14 @@ void ligarLuzes(int estaoLigadas){
 int estaAberto = LOW;
 void ligarServoJanela(int abrirJanela){
   if(estaAberto == LOW && abrirJanela){
-    for (int i = 0; i <= 120; i += 1) {
+    for (int i = 0; i <= 180; i += 1) {
       servo_janela.write(i);
       delay(10); // Wait for 50 millisecond(s)
     }
     estaAberto = HIGH;  
   }
   else if(!abrirJanela && estaAberto == HIGH){
-    for (int k = 120; k >= 0; k -= 1) {
+    for (int k = 180; k >= 0; k -= 1) {
       servo_janela.write(k);
       delay(10); // Wait for 50 millisecond(s)
     }
