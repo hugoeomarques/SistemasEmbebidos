@@ -18,6 +18,10 @@ router.get('/teste/:hum/:temp/:solo/:co2', function(req, res, next) {
     b = !b
     res.send("ligar luzes de aquecimento\n")
   }*/
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
   let temperatura = parseFloat(req.params.temp);
   let humidadeAr = parseFloat(req.params.hum)
   let humidadeSolo = parseFloat(req.params.solo);
