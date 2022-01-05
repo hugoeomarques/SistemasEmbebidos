@@ -32,7 +32,7 @@ router.get('/teste/:hum/:temp/:solo/:co2', function(req, res, next) {
   }
   
   //humidadeSolo ∈ [0,1024]
-  if(humidadeSolo < 52 || /*( ((new Date()).getHours() == 6 || (new Date()).getHours() == 22)) */) {
+  if(humidadeSolo < 52 || (new Date()).getHours() == 6 || (new Date()).getHours() == 22) {
     res.send(stringFinal + "\nregar")
   }else{
     res.send(stringFinal)

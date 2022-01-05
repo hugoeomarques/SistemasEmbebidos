@@ -11,19 +11,19 @@ Servo servo_janela, servo_rega;
 #define SERVOREGAPIN 14 
 #define LUZESTEMPPIN 16/*luzes para aumentar a temperatra*/
 #define CO2SENPIN 15
-/*const char* ssid     = "TVRS_AP";
-const char* password = "*Tavares123?*";*/
+const char* ssid     = "TVRS_AP";
+const char* password = "*Tavares123?*";
 /*const char* ssid     = "labmicro";
 const char* password = "microwifi";*/
-const char* ssid     = "Vodafone-ADBCF7";
-const char* password = "97G7FEAJ9MXCGFF3";
-const char* host = "192.168.1.141";
+/*const char* ssid     = "Vodafone-ADBCF7";
+const char* password = "97G7FEAJ9MXCGFF3";*/
+const char* host = "192.168.3.132";
 const int httpPort = 3000;
 DHT dht(DHTPIN,DHT11);
 void setup() {
   servo_janela.attach(SERVOJANELAPIN);
   servo_rega.attach(SERVOREGAPIN);
-  
+  pinMode(CO2SENPIN,INPUT);
   delay(100);
   Serial.begin(115200);
   dht.begin();
@@ -60,8 +60,8 @@ float hum = .0;
 float co2 = .0;
 void loop() {  
   lerDados();
-  delay(2000);
   getRequest();
+  delay(1000);
   /*ligarServoMotor();*/
 }
 
@@ -69,7 +69,7 @@ void lerDados(){
   potval = analogRead(POTPIN);
   temp = dht.readTemperature();
   hum = dht.readHumidity();
-  co2 = digitalWrite(CO2SENPIN);
+  co2 = digitalRead(CO2SENPIN);
   Serial.print("Temp: ");
   Serial.print(temp);
   Serial.println();
