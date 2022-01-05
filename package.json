@@ -5,5 +5,24 @@
     "express": "^4.17.2",
     "express-promise-router": "^4.1.1",
     "pg": "^8.7.1"
-  }
+  },
+  "name": "sistemasembebidos",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hugoeomarques/SistemasEmbebidos.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hugoeomarques/SistemasEmbebidos/issues"
+  },
+  "homepage": "https://github.com/hugoeomarques/SistemasEmbebidos#readme",
+  "description": ""
 }
