@@ -10,6 +10,7 @@ Servo servo_janela, servo_rega;
 #define SERVOJANELAPIN 12
 #define SERVOREGAPIN 14 
 #define LUZESTEMPPIN 16/*luzes para aumentar a temperatra*/
+#define CO2SENPIN 15
 /*const char* ssid     = "TVRS_AP";
 const char* password = "*Tavares123?*";*/
 /*const char* ssid     = "labmicro";
@@ -56,7 +57,7 @@ void setup() {
 int potval = 0;
 float temp = .0;
 float hum = .0;
-
+float co2 = .0;
 void loop() {  
   lerDados();
   delay(2000);
@@ -68,6 +69,7 @@ void lerDados(){
   potval = analogRead(POTPIN);
   temp = dht.readTemperature();
   hum = dht.readHumidity();
+  co2 = digitalWrite(CO2SENPIN);
   Serial.print("Temp: ");
   Serial.print(temp);
   Serial.println();
@@ -76,6 +78,9 @@ void lerDados(){
   Serial.println();
   Serial.print("Pot: ");
   Serial.print(potval);
+  Serial.println();
+  Serial.print("CO2: ");
+  Serial.print(co2);
   Serial.println();
 }
 void getRequest(){  
@@ -95,6 +100,8 @@ void getRequest(){
   url+=(temp);
   url+="/";
   url+=(potval);
+  url+="/";
+  url+=(co2);
   
   Serial.print("Requesting URL: ");
   Serial.println(url);
