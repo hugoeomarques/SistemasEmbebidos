@@ -3,7 +3,7 @@ var router = express.Router();
 var app = express();
 const controllers = {}
 const sequelize = require('../model/database');
-const Dados = require('../model/Dados');
+const {Dados} = require('../model/Dados');
 const Acoes = require('../model/Acoes');
 
 
