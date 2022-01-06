@@ -3,45 +3,50 @@ var router = express.Router();
 var app = express();
 const controllers = {}
 const sequelize = require('../model/database');
-const {Dados} = require('../model/Dados');
+const Dados = require('../model/Dados');
 const Acoes = require('../model/Acoes');
 
 
-sequelize.sync()
+
+
+sequelize.sync();
 
 controllers.sendData = async (req,res) => {
     // data
-    const { temp , hAr, hSolo, Co2} = req.body;
+    console.log(req.params);
+    let temperatura = parseFloat(req.params.temp);
+    let humidadeAr = parseFloat(req.params.hAr)
+    let humidadeSolo = parseFloat(req.params.hSolo);
+    let co2 = parseFloat(req.params.Co2)
+    
+      // create
+      const data = await Dados.create({
+      temperatura: temperatura,
+      hAr: humidadeAr,
+      hSolo: humidadeSolo,
+      co2: co2,
+      }) .then(function(data){
+        return data;
+        })
+        .catch(error =>{
+        console.log("Erro: "+error)
+        return error;
+        })
+        // return res
+      res.status(200).json({
+          success: true,
+  message:"Registado",
+  data: data
+      });
+     
 
-    console.log("aqui");
-    // create
-    const data = await Dados.create({
-    temperatura: temp,
-    hAr: hAr,
-    hSolo: hSolo,
-    co2: Co2,
-    })
-    .then(function(data){
-    return data;
-    })
-    .catch(error =>{
-    console.log("Erro: "+error)
-    return error;
-    })
-    // return res
-    res.status(200).json({
-        success: true,
-message:"Registado",
-data: data
-});
 
-let temperatura = parseFloat(temp);
-let humidadeAr = parseFloat(hAr)
-let humidadeSolo = parseFloat(hSolo);
-let co2 = parseFloat(Co2)
 let stringFinal = ""
 if(temperatura >= 20.9 || humidadeAr >= 80.0 || co2 == 0.0){
-  stringFinal += "abrir janelas\n";
+  const data = await Acoes.create({
+    aberturaJanela: new DATE(),
+  });
+  
 }else if(temperatura <=19.8){
   stringFinal += "ligar luzes de aquecimento\n";
 }else{
@@ -50,11 +55,16 @@ if(temperatura >= 20.9 || humidadeAr >= 80.0 || co2 == 0.0){
 
 //humidadeSolo ∈ [0,1024]
 if(humidadeSolo < 52 || (new Date()).getHours() == 6 || (new Date()).getHours() == 22) {
-  res.send(stringFinal + "\nregar")
+  const data = await Acoes.create({
+    rega: new DATE(),
+  })
+  
 }else{
   res.send(stringFinal)
 }
 console.log(stringFinal)
+
+
 
 }
 

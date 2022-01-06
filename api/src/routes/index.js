@@ -4,6 +4,6 @@ var app = express();
 
 
 const Controller = require('../controllers/index')
-router.post('/sendData',Controller.sendData);
+router.get('/sendData/:temp/:hAr/:hSolo/:Co2',Controller.sendData);
 
 module.exports = router;

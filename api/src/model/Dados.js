@@ -1,5 +1,7 @@
 var Sequelize = require('sequelize');
 var sequelize = require('./database');
+sequelize.sync()
+
 
 var Dados = sequelize.define('dados', {
 id: {
@@ -16,3 +18,7 @@ co2: Sequelize.FLOAT,
 {
      timestamps: false,
  });
+
+
+
+ module.exports = Dados
