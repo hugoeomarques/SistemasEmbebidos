@@ -1,16 +1,17 @@
 var Sequelize = require('sequelize');
 var sequelize = require('./database');
 
-var Dados = sequelize.define('acoes', {
+var Rega = sequelize.define('rega', {
 id: {
 type: Sequelize.INTEGER,
 primaryKey: true,
 autoIncrement: true,
 },
-aberturaJanela: Sequelize.DATE,
 rega: Sequelize.DATE
 
 },
 {
      timestamps: false,
  });
+
+ module.exports = Rega;

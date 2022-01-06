@@ -4,8 +4,9 @@ var app = express();
 const controllers = {}
 const sequelize = require('../model/database');
 const Dados = require('../model/Dados');
-const Acoes = require('../model/Acoes');
-
+const Rega = require('../model/Rega');
+const Janela = require("../model/Janela");
+const { DATE } = require('sequelize');
 
 
 
@@ -43,8 +44,9 @@ controllers.sendData = async (req,res) => {
 
 let stringFinal = ""
 if(temperatura >= 20.9 || humidadeAr >= 80.0 || co2 == 0.0){
-  const data = await Acoes.create({
-    aberturaJanela: new DATE(),
+  const date = new DATE();
+  const data = await Janela.create({
+    janela: date,
   });
   
 }else if(temperatura <=19.8){
@@ -55,8 +57,9 @@ if(temperatura >= 20.9 || humidadeAr >= 80.0 || co2 == 0.0){
 
 //humidadeSolo ∈ [0,1024]
 if(humidadeSolo < 52 || (new Date()).getHours() == 6 || (new Date()).getHours() == 22) {
-  const data = await Acoes.create({
-    rega: new DATE(),
+  const ultRega = new DATE();
+  const data = await Rega.create({
+    rega: ultRega,
   })
   
 }else{
