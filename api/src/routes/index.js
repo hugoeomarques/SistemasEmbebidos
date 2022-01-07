@@ -5,5 +5,5 @@ var app = express();
 
 const Controller = require('../controllers/index')
 router.get('/sendData/:temp/:hAr/:hSolo/:Co2',Controller.sendData);
-
+router.get('/requestData',Controller.requestData);
 module.exports = router;

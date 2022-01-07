@@ -7,7 +7,8 @@ const Dados = require('../model/Dados');
 const Rega = require('../model/Rega');
 const Janela = require("../model/Janela");
 const { DATE } = require('sequelize');
-
+const Sequelize = require('sequelize')
+const { QueryTypes } = require('sequelize');
 
 
 sequelize.sync();
@@ -44,9 +45,10 @@ controllers.sendData = async (req,res) => {
 
 let stringFinal = ""
 if(temperatura >= 20.9 || humidadeAr >= 80.0 || co2 == 0.0){
-  const date = new DATE();
-  const data = await Janela.create({
-    janela: date,
+  let dataAgr = new Date();
+  console.log(dataAgr)
+ const data = await Janela.create({
+    janela: dataAgr,
   });
   
 }else if(temperatura <=19.8){
@@ -57,53 +59,45 @@ if(temperatura >= 20.9 || humidadeAr >= 80.0 || co2 == 0.0){
 
 //humidadeSolo ∈ [0,1024]
 if(humidadeSolo < 52 || (new Date()).getHours() == 6 || (new Date()).getHours() == 22) {
-  const ultRega = new DATE();
+  let ultRega = new DATE();
   const data = await Rega.create({
     rega: ultRega,
   })
   
-}else{
-  res.send(stringFinal)
 }
-console.log(stringFinal)
 
-
+  console.log(stringFinal);
 
 }
 
 
-router.get('/teste/:hum/:temp/:solo/:co2', function(req, res) {
-  console.log(req.params)
-  /*if(b){
-    b = !b
-    res.send("abrir janelas\n")
-  }
-  else{
-    b = !b
-    res.send("ligar luzes de aquecimento\n")
-  }*/
 
-  let temperatura = parseFloat(req.params.temp);
-  let humidadeAr = parseFloat(req.params.hum)
-  let humidadeSolo = parseFloat(req.params.solo);
-  let co2 = parseFloat(req.params.co2)
-  let stringFinal = ""
-  if(temperatura >= 20.9 || humidadeAr >= 80.0 || co2 == 0.0){
-    stringFinal += "abrir janelas\n";
-  }else if(temperatura <=19.8){
-    stringFinal += "ligar luzes de aquecimento\n";
-  }else{
-    stringFinal += "swag\n";
+controllers.requestData = async (req,res) => {
+  // data
+ 
+  const queryDados = `SELECT * FROM "dados" 
+            order by "dados"."id" DESC
+            LIMIT 1 ;`
+            const dados = await sequelize.query(queryDados,{ type: QueryTypes.SELECT });
+  const queryJanela = `SELECT * FROM "janelas" 
+  order by "janelas"."id" DESC
+  LIMIT 1 ;`
+  const janela = await sequelize.query(queryJanela,{ type: QueryTypes.SELECT });
+  const queryRega = `SELECT * FROM "regas" 
+  order by "regas"."id" DESC
+  LIMIT 1 ;`
+  const rega = await sequelize.query(queryRega,{ type: QueryTypes.SELECT });
+           
+  const data = {
+     dados: dados,
+     ultimaAberturaJanela: janela,
+     ultimaRega: rega
   }
-  
-  //humidadeSolo ∈ [0,1024]
-  if(humidadeSolo < 52 || (new Date()).getHours() == 6 || (new Date()).getHours() == 22) {
-    res.send(stringFinal + "\nregar")
-  }else{
-    res.send(stringFinal)
-  }
-  console.log(stringFinal)
-});
+
+  console.log(data)
+
+  res.send(data);
+}
 
 
 
