@@ -6,7 +6,6 @@ const sequelize = require('../model/database');
 const Dados = require('../model/Dados');
 const Rega = require('../model/Rega');
 const Janela = require("../model/Janela");
-const { DATE } = require('sequelize');
 const Sequelize = require('sequelize')
 const { QueryTypes } = require('sequelize');
 
@@ -62,9 +61,8 @@ if(temperatura >= 20.9 || humidadeAr >= 80.0 || co2 == 0.0){
 if(humidadeSolo < 52 || (new Date()).getHours() == 6 || (new Date()).getHours() == 22) {
   
   let ultRega = new Date();
-  const data = await Rega.create({
-    rega: ultRega,
-  })
+  try{await Rega.create({
+  })}catch(e){}
 
   stringFinal += "\nregar"
 }

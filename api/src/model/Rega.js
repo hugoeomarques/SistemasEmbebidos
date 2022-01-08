@@ -7,11 +7,11 @@ type: Sequelize.INTEGER,
 primaryKey: true,
 autoIncrement: true,
 },
-rega: Sequelize.DATE
+//rega: Sequelize.DATE
 
 },
 {
-     timestamps: false,
- });
+    //timestamps: false,
+});
 
- module.exports = Rega;
+module.exports = Rega;
