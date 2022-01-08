@@ -10,9 +10,6 @@ var indexRouter = require('./routes/index');
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use('/teste',(req,res)=>{
-  res.send("Rota TESTE.");
-  });
 
 app.use('/', indexRouter);
 

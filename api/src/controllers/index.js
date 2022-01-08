@@ -35,11 +35,11 @@ controllers.sendData = async (req,res) => {
         return error;
         })
         // return res
-      res.status(200).json({
+      /*res.status(200).json({
           success: true,
   message:"Registado",
   data: data
-      });
+      });*/
      
 
 
@@ -47,7 +47,8 @@ let stringFinal = ""
 if(temperatura >= 20.9 || humidadeAr >= 80.0 || co2 == 0.0){
   let dataAgr = new Date();
   console.log(dataAgr)
- const data = await Janela.create({
+  stringFinal += "abrir janelas\n";
+  const data = await Janela.create({
     janela: dataAgr,
   });
   
@@ -59,13 +60,15 @@ if(temperatura >= 20.9 || humidadeAr >= 80.0 || co2 == 0.0){
 
 //humidadeSolo ∈ [0,1024]
 if(humidadeSolo < 52 || (new Date()).getHours() == 6 || (new Date()).getHours() == 22) {
-  let ultRega = new DATE();
+  
+  let ultRega = new Date();
   const data = await Rega.create({
     rega: ultRega,
   })
-  
-}
 
+  stringFinal += "\nregar"
+}
+res.send(stringFinal)
   console.log(stringFinal);
 
 }

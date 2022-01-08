@@ -66,7 +66,7 @@ void loop() {
 }
 
 void lerDados(){
-  potval = analogRead(POTPIN);
+  potval = analogRead(A0);
   temp = dht.readTemperature();
   hum = dht.readHumidity();
   co2 = digitalRead(CO2SENPIN);
