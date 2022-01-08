@@ -16,7 +16,7 @@ co2: Sequelize.FLOAT,
 
 },
 {
-     timestamps: false,
+    // timestamps: false,
  });
 
 

@@ -136,7 +136,7 @@
                                             <div class="col-xl-6 col-md-12">
                                                 <div class="card table-card">
                                                     <div class="card-header">
-                                                        <h5>Last Collected Data</h5>
+                                                        <h5>Leitura de dados ao momento</h5>
                                                         <div class="card-header-right">
                                                             <ul class="list-unstyled card-option">
                                                                 <li><i class="fa fa fa-wrench open-card-option"></i></li>
@@ -151,50 +151,32 @@
                                                         <div class="table-responsive">
                                                             <table class="table table-hover m-b-0 without-header">
                                                                 <tbody>
-                                                                    <tr>
-                                                                        <td>
-                                                                            <div class="d-inline-block align-middle">
-                                                                         
-                                                                                
-                                                                            </div>
-                                                                        </td>
-                                                                        <td class="text-right">
-                                                                            <h6 class="f-w-700">132, 1233, 1233<i class="fas fa-level-down-alt text-c-red m-l-10"></i></h6>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>
-                                                                            <div class="d-inline-block align-middle">
-                                                                               
-                                                                               
-                                                                            </div>
-                                                                        </td>
-                                                                        <td class="text-right">
-                                                                            <h6 class="f-w-700">132, 1233, 1233<i class="fas fa-level-down-alt text-c-red m-l-10"></i></h6>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>
-                                                                            <div class="d-inline-block align-middle">
-                                                                               
-                                                                                
-                                                                            </div>
-                                                                        </td>
-                                                                        <td class="text-right">
-                                                                            <h6 class="f-w-700">132, 1233, 1233<i class="fas fa-level-down-alt text-c-red m-l-10"></i></h6>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>
-                                                                            <div class="d-inline-block align-middle">
-                                                                                
-                                                                            
-                                                                            </div>
-                                                                        </td>
-                                                                        <td class="text-right">
-                                                                            <h6 class="f-w-700">132, 1233, 1233<i class="fas fa-level-down-alt text-c-red m-l-10"></i></h6>
-                                                                        </td>
-                                                                    </tr>
+
+<?php
+
+$ligacao=pg_pconnect("host=localhost port=5433 dbname=postgres user=postgres password=123");
+
+$pg='SELECT temperatura, "hAr", "hSolo", co2, "createdAt" FROM dados ORDER BY id DESC limit 5';
+$resultado=pg_query($ligacao,$pg);
+while($linha=pg_fetch_row($resultado))
+{
+$hora = explode(" ", $linha[4])[1];
+$hora = explode(":",$hora);
+$final = ($hora[0] . ":" . $hora[1]);
+        echo '<tr>';                                                                 
+        echo '<td>';                                                                    
+        echo '<div class="d-inline-block align-middle">';                                                                                                                                
+        echo '</div>';                                                                   
+        echo '</td>';                                                       
+        echo ' <td class="text-right">';                                                             
+        echo '<h6 class="f-w-700">Temp: '.$linha[0].' ºC  &nbsp;  &nbsp;  |  &nbsp;  &nbsp;  &nbsp; Hmd. Ar: '.$linha[1].' %  &nbsp;   &nbsp;  |  &nbsp;  &nbsp;  &nbsp;  Hmd. Solo: '.$linha[2].' %   &nbsp;   &nbsp; |  &nbsp;  &nbsp;  &nbsp;  CO2: '.$linha[3].'  &nbsp;   &nbsp; -  &nbsp;  '.$final.' <i class="fas fa-level-down-alt text-c-red m-l-10"></i></h6>';                                                                 
+        echo '</td>';                                                             
+        echo '  </tr>';                                                      
+
+         
+}
+pg_close($ligacao);
+?>
                                                                 </tbody>
                                                             </table>
 
@@ -210,24 +192,41 @@
                                                         <div class="card text-center order-visitor-card">
                                                             <div class="card-block">
                                                                 <h6 class="m-b-0">Humidade solo</h6>
-                                                                <h4 class="m-t-15 m-b-15">7652</h4>
+                                                               
+                                                                    <?php
+
+$ligacao=pg_pconnect("host=localhost port=5433 dbname=postgres user=postgres password=123");
+
+$pg='SELECT cast(avg("hSolo") as decimal(10, 2)) FROM dados' ;
+
+$resultado=pg_query($ligacao,$pg);
+$linha=pg_fetch_row($resultado);
+        echo ' <h4 class="m-t-15 m-b-15"> '.$linha[0].' </h4>';         
+
+pg_close($ligacao);
+?>
+                                                                
                                                                 <p class="m-b-0">Média diária</p>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                     <div class="col-md-6">
-                                                        <div class="card text-center order-visitor-card">
-                                                            <div class="card-block">
-                                                                <h6 class="m-b-0">Última rega</h6>
-                                                                <h4 class="m-t-15 m-b-15">06/01/2022  10:05 AM</h4>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                     
                                                     <div class="col-md-6">
                                                         <div class="card text-center order-visitor-card">
                                                             <div class="card-block">
                                                                 <h6 class="m-b-0">Humidade ar</h6>
-                                                                <h4 class="m-t-15 m-b-15">6325</h4>
+                                                                         <?php
+
+$ligacao=pg_pconnect("host=localhost port=5433 dbname=postgres user=postgres password=123");
+
+$pg='SELECT cast(avg("hAr") as decimal(10, 2)) FROM dados' ;
+
+$resultado=pg_query($ligacao,$pg);
+$linha=pg_fetch_row($resultado);
+        echo ' <h4 class="m-t-15 m-b-15"> '.$linha[0].' </h4>';         
+
+pg_close($ligacao);
+?>                                                              
                                                                 <p class="m-b-0">Média diária</p>
                                                             </div>
                                                         </div>
@@ -237,13 +236,69 @@
                                                         <div class="card text-center order-visitor-card">
                                                             <div class="card-block">
                                                                 <h6 class="m-b-0">Temperatura</h6>
-                                                                <h4 class="m-t-15 m-b-15">12</h4>
+                                                                         <?php
+
+$ligacao=pg_pconnect("host=localhost port=5433 dbname=postgres user=postgres password=123");
+
+$pg='SELECT cast(avg("temperatura") as decimal(10, 2)) FROM dados' ;
+
+$resultado=pg_query($ligacao,$pg);
+$linha=pg_fetch_row($resultado);
+        echo ' <h4 class="m-t-15 m-b-15"> '.$linha[0].' </h4>';         
+
+pg_close($ligacao);
+?>                                                                  
                                                                 <p class="m-b-0">Média diária</p>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    
-                                                    <button>Reset ao monitorizador</button>
+                                                    <div class="col-md-6">
+                                                        <div class="card text-center order-visitor-card">
+                                                            <div class="card-block">
+                                                                <h6 class="m-b-0">Última rega</h6>                                            
+<?php
+
+$ligacao=pg_pconnect("host=localhost port=5433 dbname=postgres user=postgres password=123");
+
+$pg='SELECT "rega" FROM regas ORDER BY id DESC limit 1';
+
+$resultado=pg_query($ligacao,$pg);
+$linha=pg_fetch_row($resultado);
+$hora = explode(" ", $linha[0]);
+$data = $hora[0];
+$hora = explode(":",$hora[1]);
+
+$Hfinal = ($hora[0] . ":" . $hora[1]);
+        echo ' <h5 class="m-t-15 m-b-15"> '.$data.' '.$Hfinal.' </h5>';         
+
+pg_close($ligacao);
+?>                                                                          
+                                                            </div>
+                                                            <div class="card-block">
+                                                                <h6 class="m-b-0">Última ventilação:</h6>                                            
+<?php
+
+$ligacao=pg_pconnect("host=localhost port=5433 dbname=postgres user=postgres password=123");
+
+$pg='SELECT "janela" FROM janelas ORDER BY id DESC limit 1';
+
+$resultado=pg_query($ligacao,$pg);
+$linha=pg_fetch_row($resultado);
+$hora = explode(" ", $linha[0]);
+$data = $hora[0];
+$hora = explode(":",$hora[1]);
+
+$Hfinal = ($hora[0] . ":" . $hora[1]);
+        echo ' <h5 class="m-t-15 m-b-15"> '.$data.' '.$Hfinal.' </h5>';         
+
+pg_close($ligacao);
+?>                                                                          
+                                                            </div>
+                                                        </div>
+                                                    </div>
+ <form method="get" action="remove.php">
+    <button type="submit">Reset ao monitorizador</button>
+</form>
                                                    
                                                     <!-- sale card end -->
                                                 </div>
@@ -253,44 +308,7 @@
                                     </div>
                                     <!-- Page-body end -->
                                 </div>
-                                <div class="page-wrapper">
-                                    <div class="page-body">
-                                        <div class="row">
-                                            <!-- SITE VISIT CHART start -->
-                                           
-                                            <!-- EXTRA AREA CHART Ends -->
-                                            <!-- Area Chart start -->
-                                            <div class="col-lg-12">
-                                                <div class="card">
-                                                    <div class="card-header">
-                                                        <h5>Area Chart</h5>
-                                                        <span>lorem ipsum dolor sit amet, consectetur adipisicing elit</span>
-                                                    </div>
-                                                    <div class="card-block">
-                                                        <div id="area-example"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- Area Chart Ends -->
-                                            <!-- LINE CHART start -->
-                                            <div class="col-md-12 col-lg-6">
-                                                <div class="card">
-                                                    <div class="card-header">
-                                                        <h5>Line Chart</h5>
-                                                        <span>lorem ipsum dolor sit amet, consectetur adipisicing elit</span>
-                                                    </div>
-                                                    <div class="card-block">
-                                                        <div id="line-example"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- LINE CHART Ends -->
-                                            <!-- Donut chart start -->
-                                            
-                                            <!-- Donut chart Ends -->
-                                        </div>
-                                    </div>
-                                </div>
+                              
                             </div>
                             <div id="styleSelector">
 
