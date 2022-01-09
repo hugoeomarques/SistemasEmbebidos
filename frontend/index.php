@@ -38,7 +38,7 @@
 </head>
 
 <body>
-    <!-- Pre-loader start -->
+    <!-- Pre-loader start
     <div class="theme-loader">
         <div class="loader-track">
             <div class="preloader-wrapper">
@@ -91,6 +91,7 @@
             </div>
         </div>
     </div>
+     -->
     <!-- Pre-loader end -->
     <div id="pcoded" class="pcoded">
         <div ></div>
@@ -154,7 +155,7 @@
 
 <?php
 
-$ligacao=pg_pconnect("host=localhost port=5433 dbname=postgres user=postgres password=123");
+$ligacao=pg_pconnect("host=localhost port=5432 dbname=projetoSE user=postgres password=martinho");
 
 $pg='SELECT temperatura, "hAr", "hSolo", co2, "createdAt" FROM dados ORDER BY id DESC limit 5';
 $resultado=pg_query($ligacao,$pg);
@@ -169,7 +170,7 @@ $final = ($hora[0] . ":" . $hora[1]);
         echo '</div>';                                                                   
         echo '</td>';                                                       
         echo ' <td class="text-right">';                                                             
-        echo '<h6 class="f-w-700">Temp: '.$linha[0].' ºC  &nbsp;  &nbsp;  |  &nbsp;  &nbsp;  &nbsp; Hmd. Ar: '.$linha[1].' %  &nbsp;   &nbsp;  |  &nbsp;  &nbsp;  &nbsp;  Hmd. Solo: '.$linha[2].' %   &nbsp;   &nbsp; |  &nbsp;  &nbsp;  &nbsp;  CO2: '.$linha[3].'  &nbsp;   &nbsp; -  &nbsp;  '.$final.' <i class="fas fa-level-down-alt text-c-red m-l-10"></i></h6>';                                                                 
+        echo '<h6 class="f-w-700">Temp: '.$linha[0].' ºC  &nbsp;  &nbsp;  |  &nbsp;  &nbsp;  &nbsp; Hmd. Ar: '.$linha[1].' %  &nbsp;   &nbsp;  |  &nbsp;  &nbsp;  &nbsp;  Hmd. Solo: '.round(map($linha[2],0,1024,0,100),2).' %   &nbsp;   &nbsp; |  &nbsp;  &nbsp;  &nbsp;  CO2: '.$linha[3].'  &nbsp;   &nbsp; -  &nbsp;  '.$final.' <i class="fas fa-level-down-alt text-c-red m-l-10"></i></h6>';                                                                 
         echo '</td>';                                                             
         echo '  </tr>';                                                      
 
@@ -195,13 +196,26 @@ pg_close($ligacao);
                                                                
                                                                     <?php
 
-$ligacao=pg_pconnect("host=localhost port=5433 dbname=postgres user=postgres password=123");
+function map($value, $fromLow, $fromHigh, $toLow, $toHigh) {
+    $fromRange = $fromHigh - $fromLow;
+    $toRange = $toHigh - $toLow;
+    $scaleFactor = $toRange / $fromRange;
+
+    // Re-zero the value within the from range
+    $tmpValue = $value - $fromLow;
+    // Rescale the value to the to range
+    $tmpValue *= $scaleFactor;
+    // Re-zero back to the to range
+    return $tmpValue + $toLow;
+}
+
+$ligacao=pg_pconnect("host=localhost port=5432 dbname=projetoSE user=postgres password=martinho");
 
 $pg='SELECT cast(avg("hSolo") as decimal(10, 2)) FROM dados' ;
 
 $resultado=pg_query($ligacao,$pg);
 $linha=pg_fetch_row($resultado);
-        echo ' <h4 class="m-t-15 m-b-15"> '.$linha[0].' </h4>';         
+        echo ' <h4 class="m-t-15 m-b-15"> '.round(map($linha[0],0,1024,0,100),2).'% </h4>';         
 
 pg_close($ligacao);
 ?>
@@ -217,13 +231,13 @@ pg_close($ligacao);
                                                                 <h6 class="m-b-0">Humidade ar</h6>
                                                                          <?php
 
-$ligacao=pg_pconnect("host=localhost port=5433 dbname=postgres user=postgres password=123");
+$ligacao=pg_pconnect("host=localhost port=5432 dbname=projetoSE user=postgres password=martinho");
 
 $pg='SELECT cast(avg("hAr") as decimal(10, 2)) FROM dados' ;
 
 $resultado=pg_query($ligacao,$pg);
 $linha=pg_fetch_row($resultado);
-        echo ' <h4 class="m-t-15 m-b-15"> '.$linha[0].' </h4>';         
+        echo ' <h4 class="m-t-15 m-b-15"> '.$linha[0].'% </h4>';         
 
 pg_close($ligacao);
 ?>                                                              
@@ -238,13 +252,13 @@ pg_close($ligacao);
                                                                 <h6 class="m-b-0">Temperatura</h6>
                                                                          <?php
 
-$ligacao=pg_pconnect("host=localhost port=5433 dbname=postgres user=postgres password=123");
+$ligacao=pg_pconnect("host=localhost port=5432 dbname=projetoSE user=postgres password=martinho");
 
 $pg='SELECT cast(avg("temperatura") as decimal(10, 2)) FROM dados' ;
 
 $resultado=pg_query($ligacao,$pg);
 $linha=pg_fetch_row($resultado);
-        echo ' <h4 class="m-t-15 m-b-15"> '.$linha[0].' </h4>';         
+        echo ' <h4 class="m-t-15 m-b-15"> '.$linha[0].' ºC</h4>';         
 
 pg_close($ligacao);
 ?>                                                                  
@@ -258,9 +272,9 @@ pg_close($ligacao);
                                                                 <h6 class="m-b-0">Última rega</h6>                                            
 <?php
 
-$ligacao=pg_pconnect("host=localhost port=5433 dbname=postgres user=postgres password=123");
+$ligacao=pg_pconnect("host=localhost port=5432 dbname=projetoSE user=postgres password=martinho");
 
-$pg='SELECT "rega" FROM regas ORDER BY id DESC limit 1';
+$pg='SELECT "createdAt" FROM regas ORDER BY id DESC limit 1';
 
 $resultado=pg_query($ligacao,$pg);
 $linha=pg_fetch_row($resultado);
@@ -278,7 +292,7 @@ pg_close($ligacao);
                                                                 <h6 class="m-b-0">Última ventilação:</h6>                                            
 <?php
 
-$ligacao=pg_pconnect("host=localhost port=5433 dbname=postgres user=postgres password=123");
+$ligacao=pg_pconnect("host=localhost port=5432 dbname=projetoSE user=postgres password=martinho");
 
 $pg='SELECT "janela" FROM janelas ORDER BY id DESC limit 1';
 

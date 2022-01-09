@@ -1,6 +1,6 @@
 <?php
 
-$ligacao=pg_pconnect("host=localhost port=5433 dbname=postgres user=postgres password=123");
+$ligacao=pg_pconnect("host=localhost port=5432 dbname=projetoSE user=postgres password=martinho");
 
 $pg='DELETE FROM dados';
 
