@@ -12,11 +12,11 @@ Servo servo_janela, servo_rega;
 #define LUZESTEMPPIN 16/*luzes para aumentar a temperatra*/
 #define CO2SENPIN 15
 const char* ssid     = "TVRS_AP";
-const char* password = "*Tavares123?*";
+const char* password = "*?*";
 /*const char* ssid     = "labmicro";
 const char* password = "microwifi";*/
 /*const char* ssid     = "Vodafone-ADBCF7";
-const char* password = "97G7FEAJ9MXCGFF3";*/
+const char* password = "";*/
 const char* host = "192.168.3.132";
 const int httpPort = 3000;
 DHT dht(DHTPIN,DHT11);
